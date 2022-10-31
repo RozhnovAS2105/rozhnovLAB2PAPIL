@@ -104,9 +104,23 @@ int check_pipe_id(vector <Pipe>& g) {
 
 int check_cs_id(vector <CS>& g) {
 	int x;
-	while (((cin >> x).fail()) || (cin.peek() != '\n') || (x > g.size()) || (x < 0))
-	{
-		cout << "oshibka proverka pipe > 0" << endl;
+	if (idPipe == 0)
+		cout << "NET truby dlya izm";
+	else {
+		while (((cin >> x).fail()) || (cin.peek() != '\n') || (x > g.size()) || (x < 0))
+		{
+			cout << "oshibka proverka pipe > 0" << endl;
+			cin.clear();
+			cin.ignore(INT_MAX, '\n');
+		}
+	}
+	return x;
+}
+
+int check_redac() {
+	int x;
+	while (((cin >> x).fail()) || (cin.peek() != '\n') || (x < 1) || (x > 2)) {
+		cout << "Error!!! Input integer numeric value (1 or 2) " << endl;
 		cin.clear();
 		cin.ignore(INT_MAX, '\n');
 	}
@@ -161,19 +175,24 @@ void checkINFO(Pipe& p, CS& cs)
 */
 
 void information(vector <Pipe>& gp, vector <CS>& gcs) {
-	for (int i = 0; i < gp.size(); i++) {
-		cout << "\nIndex of pipe: " << gp[i].idp << "\nPipe info:\nLenght: " << gp[i].dlina << "\nDiameter: " << gp[i].diametr
-			<< "\nStatus: " << status_check(gp[i].status) << endl;
+	if (gp.size() != 0) {
+		for (int i = 0; i < gp.size(); i++) {
+			cout << "\nIndex of pipe: " << gp[i].idPipe << "\nPipe info:\nLenght: " << gp[i].dlina << "\nDiameter: " << gp[i].diametr
+				<< "\nStatus: " << status_check(gp[i].status) << endl;
+		}
 	}
-	for (int i = 0; i < gp.size(); i++) {
-		cout << "\nIndex of CS: " << gcs[i].idcs << "\nCS info:\nName: " << gcs[i].name << "\nNumber of workshops: " << gcs[i].cehi
-			<< "\nNumber of working workshops: " << gcs[i].workcehi << "\nEffectiveness: "
-			<< gcs[i].effektivnost << "%" << endl;
+	if (gcs.size() != 0) {
+		for (int i = 0; i < gp.size(); i++) {
+			cout << "\nIndex of CS: " << gcs[i].idCS << "\nCS info:\nName: " << gcs[i].name << "\nNumber of workshops: " << gcs[i].cehi
+				<< "\nNumber of working workshops: " << gcs[i].workcehi << "\nEffectiveness: "
+				<< gcs[i].effektivnost << "%" << endl;
+		}
 	}
+}
 
 void izmPipe(Pipe& p)
 {
-	if (p.dlina == 0)//PROVERKA, chtovy byla tryba
+	if (idPipe == 0)//PROVERKA, chtovy byla tryba
 		cout << "\nY nas net dostatochnou informacii dlya redactirovaniya\n";
 	else {
 		cout << "\nVvedite svezhiu status dlya tryby(0-remont, 1 -rabotaet)\n";
@@ -182,7 +201,21 @@ void izmPipe(Pipe& p)
 	}
 }
 
-void izmCS(CS& cs) {
+void izmPipe_all(vector <Pipe>& g) {
+	bool x = 0;
+	if (idPipe == 0)
+		cout << "\nY nas net dostatochnou informacii dlya redactirovaniya\n";
+	else {
+		cout << "\nVvedite svezhiu status dlya tryby(0-remont, 1 -rabotaet)\n";
+		x = check_status_change(x);
+		for (int i = 0; i < g.size(); i++) {
+			g[i].status = x;
+		}
+		cout << status_check(x)<< endl;
+}
+
+void izmCS(CS& cs) 
+{
 	if (cs.workcehi == -1)
 		cout << "\nY nas net dostatochnou informacii dlya redactirovaniya\n";
 	else {
@@ -227,7 +260,15 @@ void load(Pipe& p, CS& cs)//dobavil proverku na nalichie file
 		cout << "Ne nashel file";
 }
 
-
+Pipe& select_pipe(vector <Pipe>& g) {
+	cout << "Enter index of pipe ";
+	int id = check_pipe_id(g);
+	return g[id - 1];
+}
+CS& select_cs(vector <CS>& g) {
+	cout << "Enter index of pipe ";
+	int id = check_cs_id(g);
+	return g[id - 1];
 
 int main()
 {
@@ -240,7 +281,7 @@ int main()
 	vector <Pipe> pipe_group;
 	vector <CS> cs_group;
 	while (option) {
-		cout << "\n 1. truba 2. CS 3.Prosmotr obektov 4. izmenit trubu 5. izmenit CS 6.save 7.load 8.exit\n";
+		cout << "\n 1. truba 2. CS 3.Prosmotr obektov 4. izmenit trubu 5. izmenit CS 6.save 7.load 8. 9. 0. exit\n";
 		//cin >> option; //ввод переменной
 		//option = prov_option(option);
 		switch (prov_option(1,8)) { //так называемая тумбочка(без ящиков(case'ов))
@@ -264,6 +305,13 @@ int main()
 			break;
 		}
 		case 4: {
+			int redac;
+			cout << "1. Izmenit trub'y 2. Izmenit vse truby";
+			redac = check_redac();
+			if (edit == 1)
+				izmPipe(select_pipe(pipe_group));
+			else
+				izmPipe_all(pipe_group);
 			//izmPipe(p);
 			break;
 		}
@@ -279,8 +327,17 @@ int main()
 			//load(p, cs);
 			break;
 		}
+		/*case 8: {
+			()
+			break;
+		}
 
-		case 8: {
+		case 9: {
+			()
+			break;
+		}*/
+
+		case 0: {
 			return 0;
 
 		}
