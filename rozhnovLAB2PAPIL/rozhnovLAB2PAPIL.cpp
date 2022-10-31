@@ -174,7 +174,34 @@ void checkINFO(Pipe& p, CS& cs)
 }
 */
 
-void information(vector <Pipe>& gp, vector <CS>& gcs) {
+/*void checkINFO(vector <Pipe>& gp, vector <CS>& gcs)
+{
+	if (gp.size() != 0) {
+		for (int i = 0; i < gp.size(); i++) {
+			cout << "\nId truby " << gp[i].idPipe << "\nPipe info:\nLenght: " << gp[i].dlina << "\nDiameter: " << gp[i].diametr
+				<< "\nStatus: " << status_check(gp[i].status) << endl;
+		}
+	}
+	if (gcs.size() != 0) {
+		for (int i = 0; i < gp.size(); i++) {
+			cout << "\nIndex of CS: " << gcs[i].idcs << "\nCS info:\nName: " << gcs[i].name << "\nNumber of workshops: " << gcs[i].cehi
+				<< "\nNumber of working workshops: " << gcs[i].workcehi << "\nEffectiveness: "
+				<< gcs[i].effektivnost << "%" << endl;
+		}
+	}
+}*/
+		//cout << "\nBbl nichego ne vpisali po PIPE'u" << endl;
+	/*else {
+		cout << "\nTruba informaciya dlina:\n" << p.dlina << "\nTruba informaciya diametr:\n" << p.diametr << "\nTruba informaciya status:\n" << p.status << endl << status_check(p.status) << endl;
+	}
+	if (cs.workcehi == -1)
+		cout << "\nBbl nichego ne vpisali po CS'u" << endl;
+	else {
+		cout << "\nCS informaciya nazvanie:\n" << cs.name << "\nCS informaciya vsego cehov:\n" << cs.cehi << "\nCS informaciya rabochie cehi:\n " << cs.workcehi << "\nCS effektivnost:\n" << cs.effektivnost << "%" << endl;
+	}
+}*/
+
+void checkINFO(vector <Pipe>& gp, vector <CS>& gcs) {
 	if (gp.size() != 0) {
 		for (int i = 0; i < gp.size(); i++) {
 			cout << "\nIndex of pipe: " << gp[i].idPipe << "\nPipe info:\nLenght: " << gp[i].dlina << "\nDiameter: " << gp[i].diametr
@@ -211,7 +238,8 @@ void izmPipe_all(vector <Pipe>& g) {
 		for (int i = 0; i < g.size(); i++) {
 			g[i].status = x;
 		}
-		cout << status_check(x)<< endl;
+		cout << status_check(x) << endl;
+	}
 }
 
 void izmCS(CS& cs) 
@@ -261,14 +289,15 @@ void load(Pipe& p, CS& cs)//dobavil proverku na nalichie file
 }
 
 Pipe& select_pipe(vector <Pipe>& g) {
-	cout << "Enter index of pipe ";
+	cout << "id Pipe ";
 	int id = check_pipe_id(g);
 	return g[id - 1];
 }
 CS& select_cs(vector <CS>& g) {
-	cout << "Enter index of pipe ";
+	cout << "id CS ";
 	int id = check_cs_id(g);
 	return g[id - 1];
+}
 
 int main()
 {
@@ -295,7 +324,7 @@ int main()
 		case 2: {
 			CS cs;
 			addCS(cs);
-			pipe_group.push_back(p);
+			cs_group.push_back(cs);
 			break;
 
 		}
@@ -308,7 +337,7 @@ int main()
 			int redac;
 			cout << "1. Izmenit trub'y 2. Izmenit vse truby";
 			redac = check_redac();
-			if (edit == 1)
+			if (redac == 1)
 				izmPipe(select_pipe(pipe_group));
 			else
 				izmPipe_all(pipe_group);
