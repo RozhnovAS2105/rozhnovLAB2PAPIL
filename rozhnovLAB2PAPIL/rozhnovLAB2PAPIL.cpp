@@ -14,6 +14,7 @@ struct Pipe
 	float dlina = 0, diametr = 0;
 	bool status = 0;
 	int idPipe = 0;
+	string name = "";
 };
 
 struct CS
@@ -71,6 +72,16 @@ float check_cin(float x)
 	return x;
 }
 
+float check_effektivnost(float x)
+{
+	while ((((cin >> x).fail()) || (cin.peek() != '\n')) || (x < 0) || (x > 100)) {
+		cout << "Oshibka! Vvedite chislo > 0" << endl;
+		cin.clear();
+		cin.ignore(INT_MAX, '\n');
+	}
+	return x;
+}
+
 bool check_status_change(bool x)
 {
 	while (((cin >> x).fail()) || (cin.peek() != '\n')) {
@@ -91,11 +102,13 @@ int check_workcehi_cin(int x, int y)//x - рабочие цехи y - всего
 	return x;
 }
 
+
+
 int check_pipe_id(vector <Pipe>& g) {
 	int x;
 	while (((cin >> x).fail()) || (cin.peek() != '\n') || (x > g.size()) || (x < 0))
 	{
-		cout << "oshibka proverka pipe > 0" << endl;
+		cout << "oshibka pri proverke pipe \nProverte dobavili li truby voobche?\nVvedite chislo (n > 0) and (n <= kol-vo trub)" << endl;
 		cin.clear();
 		cin.ignore(INT_MAX, '\n');
 	}
@@ -109,7 +122,7 @@ int check_cs_id(vector <CS>& g) {
 	else {
 		while (((cin >> x).fail()) || (cin.peek() != '\n') || (x > g.size()) || (x < 0))
 		{
-			cout << "oshibka proverka pipe > 0" << endl;
+			cout << "Oshibka pri proverke CS \nProverte dobavili li CS voobche?\nVvedite chislo (n > 0) and (n <= kol-vo CS)" << endl;
 			cin.clear();
 			cin.ignore(INT_MAX, '\n');
 		}
@@ -131,7 +144,11 @@ void addPipe(Pipe& p)
 {
 	idPipe++;
 	p.idPipe = idPipe;
-	cout << "\n Vvedite ID dlya truby\n " << p.idPipe;
+	cout << "\n ID dlya truby\n " << p.idPipe;
+	cout << "\nVvedite nazvanie\n";
+	cin.clear();
+	cin.ignore(INT_MAX, '\n');
+	getline(cin, p.name);
 	cout << "\nVvedite dliny\n"; //вывод в консоль
 	p.dlina = check_cin(p.dlina);//проверка длины
 	cout << "\nVvedite diametr\n";
@@ -158,62 +175,27 @@ void addCS(CS& cs)//FIX (Теряется название трубы «hahsh ha
 	cs.effektivnost = float(cs.workcehi) / float(cs.cehi) * 100;
 	cout << "\nEffektivnost\n" << cs.effektivnost << "%" << endl;
 }
-/*
-void checkINFO(Pipe& p, CS& cs)
-{
-	if (p.dlina == 0)
-		cout << "\nBbl nichego ne vpisali po PIPE'u" << endl;
-	else {
-		cout << "\nTruba informaciya dlina:\n" << p.dlina << "\nTruba informaciya diametr:\n" << p.diametr << "\nTruba informaciya status:\n" << p.status << endl << status_check(p.status) << endl;
-	}
-	if (cs.workcehi == -1)
-		cout << "\nBbl nichego ne vpisali po CS'u" << endl;
-	else {
-		cout << "\nCS informaciya nazvanie:\n" << cs.name << "\nCS informaciya vsego cehov:\n" << cs.cehi << "\nCS informaciya rabochie cehi:\n " << cs.workcehi << "\nCS effektivnost:\n" << cs.effektivnost << "%" << endl;
-	}
-}
-*/
 
-/*void checkINFO(vector <Pipe>& gp, vector <CS>& gcs)
-{
-	if (gp.size() != 0) {
-		for (int i = 0; i < gp.size(); i++) {
-			cout << "\nId truby " << gp[i].idPipe << "\nPipe info:\nLenght: " << gp[i].dlina << "\nDiameter: " << gp[i].diametr
-				<< "\nStatus: " << status_check(gp[i].status) << endl;
-		}
-	}
-	if (gcs.size() != 0) {
-		for (int i = 0; i < gp.size(); i++) {
-			cout << "\nIndex of CS: " << gcs[i].idcs << "\nCS info:\nName: " << gcs[i].name << "\nNumber of workshops: " << gcs[i].cehi
-				<< "\nNumber of working workshops: " << gcs[i].workcehi << "\nEffectiveness: "
-				<< gcs[i].effektivnost << "%" << endl;
-		}
-	}
-}*/
-		//cout << "\nBbl nichego ne vpisali po PIPE'u" << endl;
-	/*else {
-		cout << "\nTruba informaciya dlina:\n" << p.dlina << "\nTruba informaciya diametr:\n" << p.diametr << "\nTruba informaciya status:\n" << p.status << endl << status_check(p.status) << endl;
-	}
-	if (cs.workcehi == -1)
-		cout << "\nBbl nichego ne vpisali po CS'u" << endl;
-	else {
-		cout << "\nCS informaciya nazvanie:\n" << cs.name << "\nCS informaciya vsego cehov:\n" << cs.cehi << "\nCS informaciya rabochie cehi:\n " << cs.workcehi << "\nCS effektivnost:\n" << cs.effektivnost << "%" << endl;
-	}
-}*/
 
 void checkINFO(vector <Pipe>& gp, vector <CS>& gcs) {
 	if (gp.size() != 0) {
 		for (int i = 0; i < gp.size(); i++) {
-			cout << "\nIndex of pipe: " << gp[i].idPipe << "\nPipe info:\nLenght: " << gp[i].dlina << "\nDiameter: " << gp[i].diametr
-				<< "\nStatus: " << status_check(gp[i].status) << endl;
+			cout << "\nIndex of pipe: " << gp[i].idPipe << "\nPipe info:\nName: " << gp[i].name  << "\nLenght: " << gp[i].dlina << "\nDiameter : " << gp[i].diametr << "\nStatus : " << status_check(gp[i].status) << endl;
 		}
 	}
+	else {
+		cout << "\nBbl nichego ne vpisali po PIPE'u" << endl;
+	}
+
 	if (gcs.size() != 0) {
-		for (int i = 0; i < gp.size(); i++) {
+		for (int i = 0; i < gcs.size(); i++) {
 			cout << "\nIndex of CS: " << gcs[i].idCS << "\nCS info:\nName: " << gcs[i].name << "\nNumber of workshops: " << gcs[i].cehi
 				<< "\nNumber of working workshops: " << gcs[i].workcehi << "\nEffectiveness: "
 				<< gcs[i].effektivnost << "%" << endl;
 		}
+	}
+	else {
+		cout << "\nBbl nichego ne vpisali po CS'u" << endl;
 	}
 }
 
@@ -244,7 +226,7 @@ void izmPipe_all(vector <Pipe>& g) {
 
 void izmCS(CS& cs) 
 {
-	if (cs.workcehi == -1)
+	if (idCS == 0)
 		cout << "\nY nas net dostatochnou informacii dlya redactirovaniya\n";
 	else {
 		cout << "Vvedite svezhiu kolichestvo rabochih cehov\n";
@@ -288,6 +270,88 @@ void load(Pipe& p, CS& cs)//dobavil proverku na nalichie file
 		cout << "Ne nashel file";
 }
 
+void poisk_pipe(vector <Pipe>& g) {
+	if (idPipe != 0) {
+		cout << "\nPoisk truby po: 1.Name 2.Status" << endl;
+		int edit;
+		int k = 0;
+		bool status = 0;
+		string name;
+		edit = check_redac();
+		if (edit == 1) {
+			cout << "name dlya pipe" << endl;
+			cin >> name;
+			for (int i = 0; i < g.size(); i++) {
+				if (g[i].name == name) {
+					k++;
+					cout << "\nIndex of pipe: " << g[i].idPipe << "\nPipe info: " << "\nName: " <<
+						g[i].name << "\nLenght: " << g[i].dlina << "\nDiameter : " << g[i].diametr
+						<< "\nStatus: " << status_check(g[i].status) << endl;
+				}
+			}
+		}
+		else {
+			cout << "\nPlease, enter status of pipe (0 if pipe is repairing, 1 if pipe works) " << endl;
+			status = check_status_change(status);
+			for (int i = 0; i < g.size(); i++) {
+				if (g[i].status == status) {
+					k++;
+					cout << "\nIndex of pipe: " << g[i].idPipe << "\nPipe info: " << "\nName: " <<
+						g[i].name << "\nLenght: " << g[i].dlina << "\nDiameter : " << g[i].diametr
+						<< "\nStatus: " << status_check(g[i].status) << endl;
+				}
+			}
+		}
+		if (k == 0) {
+			cout << "\nThere is no pipe with this status." << endl;
+		}
+	}
+	else
+		cout << "You don't have any pipe" << endl;
+}
+
+void poisk_cs(vector <CS>& g) {
+	if (idCS != 0) {
+		cout << "\nPoisk CS po: 1.Name 2.Effectivnost" << endl;
+		int edit;
+		int k = 0;
+		float eff = 0;
+		string name;
+		edit = check_redac();
+		if (edit == 1) {
+			cout << "Please, enter the name of CS" << endl;
+			cin >> name;
+			for (int i = 0; i < g.size(); i++) {
+				if (g[i].name == name) {
+					k++;
+					cout << "\nIndex of CS: " << g[i].idCS << "\nCS info:\nName: " << g[i].name << "\nNumber of workshops: " << g[i].cehi
+						<< "\nNumber of working workshops: " << g[i].workcehi << "\nEffectiveness: "
+						<< g[i].effektivnost << "%" << endl;
+				}
+			}
+		}
+		else {
+			cout << "\nPlease, enter effectiveness of pipe (0-100) " << endl;
+			eff = check_effektivnost(eff);
+			for (int i = 0; i < g.size(); i++) {
+				if (g[i].effektivnost == eff) {
+					k++;
+					cout << "\nIndex of CS: " << g[i].idCS << "\nCS info:\nName: " << g[i].name << "\nNumber of workshops: " << g[i].cehi
+						<< "\nNumber of working workshops: " << g[i].workcehi << "\nEffectiveness: "
+						<< g[i].effektivnost << "%" << endl;
+				}
+			}
+		}
+		if (k == 0) {
+			cout << "\nThere is no CS with this effectiveness." << endl;
+		}
+	}
+	else
+		cout << "You don't have any CS" << endl;
+
+}
+
+
 Pipe& select_pipe(vector <Pipe>& g) {
 	cout << "id Pipe ";
 	int id = check_pipe_id(g);
@@ -304,25 +368,23 @@ int main()
 	//setlocale(LC_ALL, "ru");
 	int option = -1;
 	cout << "PRESS ENTER";
-	//Pipe p;
-	//CS cs;
+	Pipe p;
+	CS cs;
 
 	vector <Pipe> pipe_group;
 	vector <CS> cs_group;
 	while (option) {
-		cout << "\n 1. truba 2. CS 3.Prosmotr obektov 4. izmenit trubu 5. izmenit CS 6.save 7.load 8. 9. 0. exit\n";
+		cout << "\n 1. Dobavit trubu 2. Dobavit CS 3.Prosmotr obektov 4. Izmenit trubu 5. Izmenit CS 6.Save 7.Load 8. Poisk trub 9. Poisk CS 0. Exit\n";
 		//cin >> option; //ввод переменной
 		//option = prov_option(option);
 		switch (prov_option(1,8)) { //так называемая тумбочка(без ящиков(case'ов))
 		case 1: {
-			Pipe p;
 			addPipe(p);
 			pipe_group.push_back(p);
 			break;
 		}
 
 		case 2: {
-			CS cs;
 			addCS(cs);
 			cs_group.push_back(cs);
 			break;
@@ -335,7 +397,7 @@ int main()
 		}
 		case 4: {
 			int redac;
-			cout << "1. Izmenit trub'y 2. Izmenit vse truby";
+			cout << "1. Izmenit trub'y 2. Izmenit vse truby\n";
 			redac = check_redac();
 			if (redac == 1)
 				izmPipe(select_pipe(pipe_group));
@@ -346,6 +408,9 @@ int main()
 		}
 		case 5: {
 			//izmCS(cs);
+			int redac;
+			cout << "1. Izmenit CS'y 2. Izmenit vse CS\n";
+			izmCS(select_cs(cs_group));
 			break;
 		}
 		case 6: {
@@ -356,15 +421,15 @@ int main()
 			//load(p, cs);
 			break;
 		}
-		/*case 8: {
-			()
+		case 8: {
+			poisk_pipe(pipe_group);
 			break;
 		}
 
 		case 9: {
-			()
+			poisk_cs(cs_group);
 			break;
-		}*/
+		}
 
 		case 0: {
 			return 0;
