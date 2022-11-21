@@ -51,16 +51,6 @@ int prov_option(int min, int max)
 	return x;
 }
 
-string status_check(bool x)
-{
-	if (x == true)
-		return ("Truba rabotaet");
-	else if (x == false)
-		return ("Truba chinitsya");
-	else
-		return ("Neizvestnaya");
-
-}
 
 float check_cin(float x)
 {
